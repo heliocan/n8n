@@ -1,5 +1,5 @@
 # Usa a imagem oficial completa do n8n
-FROM n8n:latest
+FROM n8nio/n8n:latest
 
 # --- (Opcional, mas recomendado) aumentar heap se for rodar libs pesadas ---
 ENV NODE_OPTIONS="--max-old-space-size=2048"
