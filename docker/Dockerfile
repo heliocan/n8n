@@ -25,10 +25,8 @@ RUN if command -v apt-get >/dev/null 2>&1; then \
 RUN npm config set fund false \
  && npm config set audit false \
  && npm config set update-notifier false \
- && npm i -g --omit=dev \
-      jsonwebtoken@^9 \
-      axios@^1 \
- && npm cache clean --yes
+ && npm i -g --omit=dev jsonwebtoken@^9 axios@^1
+
 
 # Healthcheck simples (verifica /rest/health)
 HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=5 \
