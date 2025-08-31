@@ -28,7 +28,7 @@ RUN npm config set fund false \
  && npm i -g --omit=dev \
       jsonwebtoken@^9 \
       axios@^1 \
- && npm cache clean --force
+ && npm cache clean --yes
 
 # Healthcheck simples (verifica /rest/health)
 HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=5 \
