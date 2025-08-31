@@ -23,13 +23,13 @@ services:
     networks:
       - n8n-net
 
-  n8n-python:
+  n8n-cloud:
     build:
       context: ./docker
       dockerfile: Dockerfile
-    image: n8n-python-custom:latest
+    image: n8n-cloud-custom:latest
     restart: always
-    container_name: n8n-python
+    container_name: n8n-cloud
     environment:
       N8N_CODE_NODE_FUNCTION_ALLOW_EXTERNAL: ${N8N_CODE_NODE_FUNCTION_ALLOW_EXTERNAL}
       N8N_CODE_NODE_FUNCTION_EXTERNAL_MODULES: ${N8N_CODE_NODE_FUNCTION_EXTERNAL_MODULES}
