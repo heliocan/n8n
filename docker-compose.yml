@@ -14,6 +14,15 @@ services:
     networks:
       - n8n-net
 
+  redis:
+    image: redis:7-alpine
+    restart: always
+    container_name: n8n-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - n8n-net
+
   n8n-python:
     build:
       context: ./docker
@@ -49,6 +58,12 @@ services:
       DB_POSTGRESDB_PASSWORD: ${DB_POSTGRESDB_PASSWORD}
       GENERIC_TIMEZONE: ${GENERIC_TIMEZONE}
       TZ: ${TZ}
+      # 👇 REDIS---------------
+      EXECUTIONS_MODE: ${EXECUTIONS_MODE}
+      QUEUE_BULL_REDIS_HOST: ${QUEUE_BULL_REDIS_HOST}
+      QUEUE_BULL_REDIS_PORT: ${QUEUE_BULL_REDIS_PORT}
+      QUEUE_BULL_REDIS_DB: ${QUEUE_BULL_REDIS_DB}
+      # REDIS---------------fim
     ports:
       - "5678:5678"
     volumes:
