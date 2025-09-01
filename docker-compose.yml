@@ -38,6 +38,7 @@ services:
       # ==== n8n ====
       N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
       N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: ${N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS}
+      OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS: ${OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS}
       N8N_RUNNERS_ENABLED: ${N8N_RUNNERS_ENABLED}
       N8N_EXECUTIONS_PROCESS: ${N8N_EXECUTIONS_PROCESS}
       N8N_CONCURRENCY_PRODUCTION_LIMIT: ${N8N_CONCURRENCY_PRODUCTION_LIMIT}
@@ -89,7 +90,7 @@ services:
   n8n-worker:
     image: n8n-cloud-custom:latest
     restart: always
-    container_name: n8n-worker-1
+    container_name: n8n-worker
     depends_on:
       - postgres
       - redis
@@ -112,7 +113,8 @@ services:
       TZ: ${TZ}
 
       # Opcional (seguir depreciação do log):
-      OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS: "true"
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: ${N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS}
+      OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS: ${OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS}
     command: ["n8n", "worker", "--concurrency=20"]
     networks:
       - n8n-net
