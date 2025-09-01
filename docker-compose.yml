@@ -86,6 +86,38 @@ services:
     networks:
       - n8n-net
 
+  n8n-worker:
+    image: n8n-cloud-custom:latest
+    restart: always
+    container_name: n8n-worker-1
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      # ===== Replicar as mesmas variáveis do n8n-cloud que são de DB/Redis/TZ =====
+      DB_TYPE: ${DB_TYPE}
+      DB_POSTGRESDB_DATABASE: ${DB_POSTGRESDB_DATABASE}
+      DB_POSTGRESDB_HOST: ${DB_POSTGRESDB_HOST}
+      DB_POSTGRESDB_PORT: ${DB_POSTGRESDB_PORT}
+      DB_POSTGRESDB_USER: ${DB_POSTGRESDB_USER}
+      DB_POSTGRESDB_SCHEMA: ${DB_POSTGRESDB_SCHEMA}
+      DB_POSTGRESDB_PASSWORD: ${DB_POSTGRESDB_PASSWORD}
+
+      EXECUTIONS_MODE: ${EXECUTIONS_MODE}
+      QUEUE_BULL_REDIS_HOST: ${QUEUE_BULL_REDIS_HOST}
+      QUEUE_BULL_REDIS_PORT: ${QUEUE_BULL_REDIS_PORT}
+      QUEUE_BULL_REDIS_DB: ${QUEUE_BULL_REDIS_DB}
+
+      GENERIC_TIMEZONE: ${GENERIC_TIMEZONE}
+      TZ: ${TZ}
+
+      # Opcional (seguir depreciação do log):
+      OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS: "true"
+    command: ["n8n", "worker", "--concurrency=20"]
+    networks:
+      - n8n-net
+
+
 volumes:
   data:
 
