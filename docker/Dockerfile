@@ -1,5 +1,5 @@
 # Usa a imagem oficial completa do n8n
-FROM n8nio/n8n:latest
+FROM n8nio/n8n:1.110.0
 
 USER root
 
@@ -25,8 +25,7 @@ RUN if command -v apt-get >/dev/null 2>&1; then \
 RUN npm config set fund false \
  && npm config set audit false \
  && npm config set update-notifier false \
- && npm i -g --omit=dev jsonwebtoken@^9 axios@^1 \
- && npm i -g n8n@1.109.1 && ln -sf $(npm root -g)/n8n/bin/n8n /usr/local/bin/n8n
+ && npm i -g --omit=dev jsonwebtoken@^9 axios@^1
 
 
 
