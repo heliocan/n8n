@@ -30,6 +30,12 @@ services:
     image: n8n-cloud-custom:latest
     restart: always
     container_name: n8n-cloud
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:5678/healthz/readiness >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      start_period: 40s
+      retries: 5
     environment:
       # ==== Code Node (JS): liberar built-ins e externos ====
       NODE_FUNCTION_ALLOW_BUILTIN: ${NODE_FUNCTION_ALLOW_BUILTIN}
