@@ -27,13 +27,12 @@ services:
     networks:
       - n8n-net
 
-  # novo serviço para administração do Redis
   redis-commander:
     image: rediscommander/redis-commander:latest
-    container_name: redis-admin
+    container_name: n8n-redis-admin
     restart: always
     environment:
-      - REDIS_HOSTS=local:default:${REDIS_PASSWORD}@redis:6379
+      - REDIS_HOSTS=local:redis:6379:0:${REDIS_PASSWORD}
     ports:
       - "8081:8081"   # expõe a UI na porta 8081
     depends_on:
