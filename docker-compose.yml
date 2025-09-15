@@ -18,8 +18,26 @@ services:
     image: redis:7-alpine
     restart: always
     container_name: n8n-redis
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"] # exige senha no servidor
+    environment:
+      - REDIS_USER=${REDIS_USER}        # username para clientes ACL
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     ports:
       - "6379:6379"
+    networks:
+      - n8n-net
+
+  # novo serviço para administração do Redis
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis-admin
+    restart: always
+    environment:
+      - REDIS_HOSTS=local:${REDIS_USER}:${REDIS_PASSWORD}@redis:6379
+    ports:
+      - "8081:8081"   # expõe a UI na porta 8081
+    depends_on:
+      - redis
     networks:
       - n8n-net
 
