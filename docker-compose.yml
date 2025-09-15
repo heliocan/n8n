@@ -119,7 +119,7 @@ services:
     restart: always
     container_name: n8n-worker
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli -h ${QUEUE_BULL_REDIS_HOST} -p ${QUEUE_BULL_REDIS_PORT} --user ${QUEUE_BULL_REDIS_USERNAME:-default} -a ${QUEUE_BULL_REDIS_PASSWORD} PING | grep -q PONG"]
+      test: ["CMD-SHELL", "redis-cli -h ${QUEUE_BULL_REDIS_HOST} -p ${QUEUE_BULL_REDIS_PORT} --user ${REDIS_USER:-default} -a ${REDIS_PASSWORD} PING | grep -q PONG"]
       interval: 30s
       timeout: 5s
       start_period: 30s
