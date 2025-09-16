@@ -14,16 +14,22 @@ services:
     networks:
       - n8n-net
 
-  redis:
-    image: redis:7-alpine
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: n8n-redis-admin
     restart: always
-    container_name: n8n-redis
-    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"] # exige senha no servidor
     environment:
-      - REDIS_USER=${REDIS_USER}        # username para clientes ACL
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_HOSTS=local:redis:6379:0:${REDIS_PASSWORD}
+      - HTTP_USER=${RC_HTTP_USER}          # <-- NOVO: usuário para a UI
+      - HTTP_PASSWORD=${RC_HTTP_PASSWORD}  # <-- NOVO: senha para a UI
+      # Opcional: usar hash bcrypt em vez de senha pura
+      # - HTTP_PASSWORD_HASH=${RC_HTTP_PASSWORD_HASH}
+      # Opcional: reduzir dados sensíveis nos logs
+      - NO_LOG_DATA=true
     ports:
-      - "6379:6379"
+      - "8081:8081"
+    depends_on:
+      - redis
     networks:
       - n8n-net
 
