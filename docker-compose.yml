@@ -19,27 +19,40 @@ services:
     restart: always
     container_name: n8n-redis
     command:
-      [
-        "redis-server",
-        "--requirepass", "${REDIS_PASSWORD}",
-        "--appendonly", "yes",
-        "--appendfsync", "everysec",
-        "--save", "900 1",
-        "--save", "300 10",
-        "--save", "60 10000",
-        "--rdbcompression", "yes",
-        "--aof-use-rdb-preamble", "yes",
-        "--dir", "/data",
-        "--dbfilename", "dump.rdb",
-        "--appendfilename", "appendonly.aof"
-      ]
+      - redis-server                               # binário do servidor Redis
+      - --requirepass
+      - ${REDIS_PASSWORD}                          # senha obrigatória p/ conexões (ACL básica)
+      - --appendonly
+      - "yes"                                      # habilita AOF (persistência append-only)
+      - --appendfsync
+      - everysec                                   # fsync a cada ~1s (equilíbrio durabilidade x desempenho)
+      - --auto-aof-rewrite-percentage
+      - "100"                                      # dispara rewrite quando AOF dobrar de tamanho
+      - --auto-aof-rewrite-min-size
+      - 64mb                                       # só reescreve se tiver pelo menos 64MB (evita rewrites pequenos)
+      - --save
+      - "900 1"                                    # RDB: 1 mudança em 15min gera snapshot
+      - --save
+      - "300 10"                                   # RDB: 10 mudanças em 5min gera snapshot
+      - --save
+      - "60 10000"                                 # RDB: 10000 mudanças em 1min gera snapshot
+      - --rdbcompression
+      - "yes"                                      # comprime snapshots RDB (menor espaço em disco)
+      - --aof-use-rdb-preamble
+      - "yes"                                      # AOF híbrido: inicia com RDB + incrementos (startup mais rápida)
+      - --dir
+      - /data                                      # diretório dos arquivos de persistência
+      - --dbfilename
+      - dump.rdb                                   # nome do arquivo RDB
+      - --appendfilename
+      - appendonly.aof                             # nome base do AOF (no Redis 7 vira manifest + partes)
     environment:
       - REDIS_USER=${REDIS_USER}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     ports:
       - "6379:6379"
     volumes:
-      - redis-data:/data   # <-- GARANTE persistência real
+      - redis-data:/data                           # volume persistente p/ RDB/AOF
     networks:
       - n8n-net
 
