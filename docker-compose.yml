@@ -18,14 +18,31 @@ services:
     image: redis:7-alpine
     restart: always
     container_name: n8n-redis
-    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"] # exige senha no servidor
+    command:
+      [
+        "redis-server",
+        "--requirepass", "${REDIS_PASSWORD}",
+        "--appendonly", "yes",
+        "--appendfsync", "everysec",
+        "--save", "900 1",       # 1 snapshot se houver ≥1 mudança em 15min
+        "--save", "300 10",      # ou ≥10 mudanças em 5min
+        "--save", "60 10000",    # ou ≥10000 mudanças em 1min
+        "--rdbcompression", "yes",
+        "--aof-use-rdb-preamble", "yes",
+        "--dir", "/data",
+        "--dbfilename", "dump.rdb",
+        "--appendfilename", "appendonly.aof"
+      ]
     environment:
-      - REDIS_USER=${REDIS_USER}        # username para clientes ACL
+      - REDIS_USER=${REDIS_USER}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     ports:
       - "6379:6379"
+    volumes:
+      - redis-data:/data   # <-- GARANTE persistência real
     networks:
       - n8n-net
+
 
   redis-commander:
     image: rediscommander/redis-commander:latest
@@ -170,6 +187,7 @@ services:
 
 volumes:
   data:
+  redis-data:   # <-- novo volume para o Redis
 
 networks:
   n8n-net:
