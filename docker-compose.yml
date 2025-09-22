@@ -24,9 +24,9 @@ services:
         "--requirepass", "${REDIS_PASSWORD}",
         "--appendonly", "yes",
         "--appendfsync", "everysec",
-        "--save", "900 1",       # 1 snapshot se houver ≥1 mudança em 15min
-        "--save", "300 10",      # ou ≥10 mudanças em 5min
-        "--save", "60 10000",    # ou ≥10000 mudanças em 1min
+        "--save", "900 1",
+        "--save", "300 10",
+        "--save", "60 10000",
         "--rdbcompression", "yes",
         "--aof-use-rdb-preamble", "yes",
         "--dir", "/data",
