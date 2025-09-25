@@ -1,6 +1,7 @@
 # Usa a imagem oficial completa do n8n
 # FROM n8nio/n8n:1.110.0
-FROM n8nio/n8n:latest
+# FROM n8nio/n8n:latest
+FROM n8nio/n8n:1.113.0
 
 USER root
 
